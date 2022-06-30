@@ -1,25 +1,23 @@
 import React, { Component } from "react";
 import { Nav, NavMenu, MenuItem } from "./styles/Header.styled";
+import { connect } from "react-redux";
 
 class Header extends Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      isCurrencyOpen: "false",
-    };
-  }
-
-  componentDidMount() {
-    this.setState({ myState: "Florida" });
   }
 
   render() {
-    const { myState } = this.state || {};
-    const message = `The current state is ${myState}.`;
-
     return (
       <Nav>
+        <button
+          onClick={() => {
+            this.props.add(10);
+          }}
+        >
+          ddwadwdwa
+        </button>
+        {JSON.stringify(this.props)}
         <NavMenu>
           <MenuItem selected={true}>WOMEN</MenuItem>
           <MenuItem> MEN</MenuItem>
@@ -41,4 +39,19 @@ class Header extends Component {
   }
 }
 
-export default Header;
+const mapStateToProps = (state) => {
+  console.log("state");
+  console.log(state);
+  return {
+    person: state,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    add: (num) => dispatch({ type: "add", num }),
+    dec: (num) => dispatch({ type: "dec", num }),
+    mul: (num) => dispatch({ type: "mul", num }),
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

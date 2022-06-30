@@ -6,7 +6,7 @@ export const ProductGrid = styled.div`
   grid-template: repeat(3, 1fr) / repeat(3, 1fr);
 `;
 
-export const ProductCard = styled.div`
+export const ProductCardWrapper = styled.div`
   padding: 16px;
   max-width: 386px;
 `;

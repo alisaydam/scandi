@@ -1,87 +1,44 @@
 import React from "react";
 import { connect } from "react-redux";
 import { fetchProducts } from "../hooks/userProducts";
+import { graphql } from "@apollo/client/react/hoc";
+
+import { FETCH_PRODUCTS } from "../query/queries";
+import ProductCard from "./ProductCard";
 import {
   ProductGrid,
-  ProductCard,
+  ProductCardWrapper,
   ProductImage,
   ProductName,
   ProductPrice,
 } from "./styles/Products.styled";
-import { useProducts, GET_PRODUCTS } from "../hooks/userProducts";
-
-const mapStateToProps = (state) => {
-  return {};
-};
-
-const mapDispatchToProps = {
-  fetchProducts,
-};
 
 class Products extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      loading: this.props.data.loading,
       products: [],
     };
   }
+  // const arr = this.props.data.categories;
+  // console.log([...arr[1].products, ...arr[2].products]);
 
-  componentDidMount() {
-    this.props.fetchProducts();
+  displayProductsOnCategory() {
+    if (this.props.data.loading) {
+      return <div>Loading...</div>;
+    }
+    console.log(this.props.data.categories[0].products);
+    const products = this.props.data.categories[0].products.map((product) => (
+      <ProductCard product={product} />
+    ));
+    return products;
   }
-
   render() {
-    console.log("res");
-    return (
-      <ProductGrid>
-        <ProductCard>
-          <ProductImage src="product.png" />
-          <ProductName>Apollo Running Shoess</ProductName>
-          <ProductPrice>$50.00</ProductPrice>
-        </ProductCard>
-        <ProductCard>
-          <ProductImage src="product.png" />
-          <ProductName>Apollo Running Shoess</ProductName>
-          <ProductPrice>$50.00</ProductPrice>
-        </ProductCard>
-        <ProductCard>
-          <ProductImage src="product.png" />
-          <ProductName>Apollo Running Shoess</ProductName>
-          <ProductPrice>$50.00</ProductPrice>
-        </ProductCard>
-        <ProductCard>
-          <ProductImage src="product.png" />
-          <ProductName>Apollo Running Shoess</ProductName>
-          <ProductPrice>$50.00</ProductPrice>
-        </ProductCard>
-        <ProductCard>
-          <ProductImage src="product.png" />
-          <ProductName>Apollo Running Shoess</ProductName>
-          <ProductPrice>$50.00</ProductPrice>
-        </ProductCard>
-        <ProductCard>
-          <ProductImage src="product.png" />
-          <ProductName>Apollo Running Shoess</ProductName>
-          <ProductPrice>$50.00</ProductPrice>
-        </ProductCard>
-        <ProductCard>
-          <ProductImage src="product.png" />
-          <ProductName>Apollo Running Shoess</ProductName>
-          <ProductPrice>$50.00</ProductPrice>
-        </ProductCard>
-        <ProductCard>
-          <ProductImage src="product.png" />
-          <ProductName>Apollo Running Shoess</ProductName>
-          <ProductPrice>$50.00</ProductPrice>
-        </ProductCard>
-        <ProductCard>
-          <ProductImage src="product.png" />
-          <ProductName>Apollo Running Shoess</ProductName>
-          <ProductPrice>$50.00</ProductPrice>
-        </ProductCard>
-      </ProductGrid>
-    );
+    return <ProductGrid>{this.displayProductsOnCategory()}</ProductGrid>;
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Products);
+const getProducts = graphql(FETCH_PRODUCTS);
+
+export default getProducts(Products); 

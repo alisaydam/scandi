@@ -1,8 +1,4 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { productsReduces } from "../hooks/userProducts";
+// import { createStore } from "redux";
+// import reducer from "./reducer";
 
-export const store = configureStore({
-  reducer: {
-    products: productsReduces,
-  },
-});
+// export const store = createStore(reducer);
