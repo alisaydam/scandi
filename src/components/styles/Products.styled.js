@@ -1,19 +1,23 @@
 import styled from "styled-components";
 
 export const ProductGrid = styled.div`
+  max-width: 1140px;
+  margin: auto;
   display: grid;
   grid-gap: 100px 40px;
   grid-template: repeat(3, 1fr) / repeat(3, 1fr);
 `;
 
 export const ProductCardWrapper = styled.div`
+  position: relative;
   padding: 16px;
-  max-width: 386px;
+  max-width: 350px;
 `;
 
 export const ProductImage = styled.img`
   width: 100%;
   margin-bottom: 25px;
+  cursor: pointer;
 `;
 
 export const ProductName = styled.h2`
@@ -21,10 +25,43 @@ export const ProductName = styled.h2`
   font-size: 18px;
   line-height: 160%;
   font-style: normal;
+  cursor: pointer;
 `;
 
 export const ProductPrice = styled.span`
   font-weight: 600;
   font-size: 18px;
   line-height: 160%;
+`;
+
+export const AddToCardIcon = styled.div`
+  position: absolute;
+  background-color: #5ece7b;
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  right: 20px;
+  bottom: 8px;
+  cursor: pointer;
+`;
+export const OutOfStockModal = styled.div`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+`;
+
+export const OutOfStock = styled.p`
+  background-color: rgba(0, 0, 0, 0.2);
+  color: rgba(128, 128, 128, 0.9);
+  width: 100%;
+  font-size: 40px;
+  font-weight: 700;
+  margin-top: 25%;
+  height: 50px;
+  text-align: center;
 `;

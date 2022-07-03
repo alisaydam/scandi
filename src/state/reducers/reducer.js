@@ -1,38 +1,30 @@
-const currency = localStorage.getItem("currentcyChoice");
-localStorage.setItem("currency", "$");
-const initialState = {
-  selectedCategory: "all",
-  currency: currency || "$",
-  cart: JSON.parse(localStorage.getItem("cart")) || [],
-};
-
-const reducer = (state = initialState, action) => {
-  if (action.type === "add") {
-    state = { ...state, num: action.num };
+export const categoryReducer = (state = "all", action) => {
+  if (action.type === "change-category") {
+    state = action.category;
     return state;
-  }
-  if (action.type === "dec") {
-    return state - action.payload;
-  }
-  if (action.type === "mul") {
-    return state * action.payload;
   }
   return state;
 };
+
+const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+export const cartReducer = (state = cart, action) => {
+  if (action.type === "add-to-cart") {
+    cart.push(action.productData);
+    localStorage.setItem("cart", JSON.stringify(cart));
+    console.log(state);
+    return state;
+  }
+  return state;
+};
+
 export const selectedCurrency = (
   state = localStorage.getItem("currency") || "$",
   action
 ) => {
-  if (action.type === "add") {
-    return state;
-  }
-  if (action.type === "dec") {
-    return state - action.payload;
-  }
-  if (action.type === "mul") {
-    return state * action.payload;
+  if (action.type === "change-currency") {
+    localStorage.setItem("currency", action.currency);
+    state = action.currency;
   }
   return state;
 };
-
-export default reducer;

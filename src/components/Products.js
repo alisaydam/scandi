@@ -1,37 +1,49 @@
 import React from "react";
-import { connect } from "react-redux";
-import { fetchProducts } from "../hooks/userProducts";
 import { graphql } from "@apollo/client/react/hoc";
 
 import { FETCH_PRODUCTS } from "../query/queries";
+import { store } from "../state/store";
 import ProductCard from "./ProductCard";
-import {
-  ProductGrid,
-  ProductCardWrapper,
-  ProductImage,
-  ProductName,
-  ProductPrice,
-} from "./styles/Products.styled";
+import { ProductGrid } from "./styles/Products.styled";
 
 class Products extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      category: store.getState().category,
       loading: this.props.data.loading,
       products: [],
     };
   }
-  // const arr = this.props.data.categories;
-  // console.log([...arr[1].products, ...arr[2].products]);
+  componentDidMount() {
+    this.unsubscribe = store.subscribe(() => {
+      this.setState({
+        category: store.getState().category,
+      });
+    });
+  }
 
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
   displayProductsOnCategory() {
     if (this.props.data.loading) {
       return <div>Loading...</div>;
     }
-    console.log(this.props.data.categories[0].products);
-    const products = this.props.data.categories[0].products.map((product) => (
-      <ProductCard product={product} />
-    ));
+
+    let category = 0;
+    if (this.state.category === "all") category = 0;
+    if (this.state.category === "clothes") category = 1;
+    if (this.state.category === "tech") category = 2;
+
+    const products = this.props.data.categories[category].products.map(
+      (product, i) => (
+        <div key={i} id={i}>
+          <ProductCard cardId={i} key={i} product={product} />
+        </div>
+      )
+    );
+
     return products;
   }
   render() {
@@ -41,4 +53,4 @@ class Products extends React.Component {
 
 const getProducts = graphql(FETCH_PRODUCTS);
 
-export default getProducts(Products); 
+export default getProducts(Products);

@@ -10,6 +10,7 @@ export const FETCH_PRODUCTS = gql`
         brand
         inStock
         gallery
+        description
         prices {
           amount
           currency {

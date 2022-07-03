@@ -53,13 +53,13 @@ client
   .then((result) => result);
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <ApolloProvider client={client}>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </ApolloProvider>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <ApolloProvider client={client}>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </ApolloProvider>
+  // </React.StrictMode>
 );
 
  

@@ -1,8 +1,15 @@
 import { createStore, combineReducers } from "redux";
-import reducer, { selectedCurrency } from "./reducers/reducer";
+import {
+  selectedCurrency,
+  categoryReducer,
+  cartReducer,
+} from "./reducers/reducer";
 
-export const rootReducer = combineReducers({ reducer, selectedCurrency });
+export const rootReducer = combineReducers({
+  selectedCurrency,
+  category: categoryReducer,
+  addToCart: cartReducer,
+});
 
 export const store = createStore(rootReducer);
-
-console.log(store.getState());
+ 
