@@ -32,11 +32,20 @@ class Cart extends Component {
   }
 
   render() {
-    console.log(this.state.cart.totalCost);
-
     return (
       <>
         <DetailsWrapCartPage>
+          <div
+            style={{
+              fontStyle: "normal",
+              fontWeight: 700,
+              fontSize: "32px",
+              marginTop: "80px",
+              marginBottom: "50px",
+            }}
+          >
+            CART
+          </div>
           {this.state.cart.cart.map((product, i) => (
             <CartDetailsLimiter>
               <ProductDetailsCard baseSize={10} key={i} item={product} />
