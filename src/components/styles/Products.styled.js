@@ -6,6 +6,7 @@ export const ProductGrid = styled.div`
   display: grid;
   grid-gap: 100px 40px;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  place-items: center;
 `;
 
 export const ProductCardWrapper = styled.div`
