@@ -10,10 +10,18 @@ import {
   CurrencyIcon,
   CartItemNumber,
   CartNumber,
+  OverLayPositioner,
+  OverlayLimiter,
+  BoldTitle,
+  Count,
+  TotalWraper,
+  CountWrapper,
+  ViewBag,
+  CheckoutButton,
 } from "./styles/Header.styled";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-
+import ProductDetailsCard from "./ProductDetailsCard";
 import { store } from "../state/store";
 
 class Header extends Component {
@@ -22,10 +30,19 @@ class Header extends Component {
     this.state = {
       isMenuOpen: false,
       showModal: false,
-      cart: store.getState().addToCart,
+      cart: store.getState().cartStore,
       currency: store.getState().selectedCurrency,
     };
   }
+  componentDidMount() {
+    this.unsubscribe = store.subscribe(() => {
+      this.setState({
+        currency: store.getState().selectedCurrency,
+        cart: store.getState().cartStore,
+      });
+    });
+  }
+
   openCurrencySelect = () => {
     this.setState({ isMenuOpen: !this.state.isMenuOpen });
   };
@@ -33,17 +50,52 @@ class Header extends Component {
     this.props.updateCurrency(e.target.value);
     this.setState({ currency: store.getState().selectedCurrency });
     this.setState({ isMenuOpen: false });
+    this.props.updateCost("update");
   };
 
-  componentDidMount() {}
+  toggleModal = (e) => {
+    this.setState({ showModal: !this.state.showModal });
+  };
+  closeModal = (e) => {
+    if (e.target.id === "modal") {
+      this.setState({ showModal: false });
+    }
+  };
   render() {
     return (
       <Nav>
         {this.state.showModal && (
-          <Modal>
-            <CardOverlay>
-              <h1>my bag</h1>
-            </CardOverlay>
+          <Modal onClick={this.closeModal} id="modal">
+            <OverLayPositioner id="modal">
+              <CardOverlay>
+                <CountWrapper>
+                  <BoldTitle>My Bag, </BoldTitle>
+                  <Count>&nbsp;{this.state.cart.cart.length} &nbsp;items</Count>
+                </CountWrapper>
+                {this.state.cart.cart.map((product, i) => (
+                  <OverlayLimiter baseSize={5}>
+                    <ProductDetailsCard baseSize={5} key={i} item={product} />
+                  </OverlayLimiter>
+                ))}
+                <TotalWraper>
+                  <BoldTitle>Total</BoldTitle>
+                  <BoldTitle>
+                    {((this.state.cart.totalCost / 100) * 21).toFixed(2) || 0}{" "}
+                    {this.state.currency}
+                  </BoldTitle>
+                </TotalWraper>
+                <TotalWraper>
+                  <Link
+                    style={{ textDecoration: "none" }}
+                    to="/cart"
+                    onClick={() => this.setState({ showModal: false })}
+                  >
+                    <ViewBag>VIEW BAG</ViewBag>
+                  </Link>
+                  <CheckoutButton>CHECKOUT</CheckoutButton>
+                </TotalWraper>
+              </CardOverlay>
+            </OverLayPositioner>
           </Modal>
         )}
         <NavMenu>
@@ -51,9 +103,9 @@ class Header extends Component {
           <MenuItem> MEN</MenuItem>
           <MenuItem> KIDS</MenuItem>
         </NavMenu>
-        <Link to={`/cart`}>
+        <Link to={`/`}>
           <div>
-            <img src="logo.png" alt="dd" />
+            <img src="/logo.png" alt="dd" />
           </div>
         </Link>
 
@@ -74,11 +126,12 @@ class Header extends Component {
           </MenuItem>
           <MenuItem
             style={{ position: "relative" }}
-            onClick={() => this.setState({ showModal: !this.state.showModal })}
+            onClick={this.toggleModal}
+            id="card-overlay"
           >
-            <img src="cart.png" alt="cart" />
+            <img src="/cart.png" alt="cart" />
             <CartItemNumber>
-              <CartNumber>5</CartNumber>
+              <CartNumber>{this.state.cart.cart.length}</CartNumber>
             </CartItemNumber>
           </MenuItem>
         </NavMenu>
@@ -87,17 +140,14 @@ class Header extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    person: state,
-  };
-};
-
 const mapDispatchToProps = (dispatch) => {
   return {
     updateCurrency: (currency) => {
       dispatch({ type: "change-currency", currency });
     },
+    updateCost: (currency) => {
+      dispatch({ type: "update-cost", currency });
+    },
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default connect(null, mapDispatchToProps)(Header); 

@@ -49,11 +49,22 @@ export const Modal = styled.div`
 
 export const CardOverlay = styled.div`
   position: absolute;
-  width: 325px;
-  height: 680px;
-  right: 20%;
-  background: red;
-  padding:32px; 16px 
+  max-height: 500px;
+  right: 0;
+  background: white;
+  padding: 16px 30px 16px 16px;
+  overflow: scroll;
+  overflow-x: hidden;
+  &::-webkit-scrollbar {
+    width: 6px;
+    background-color: #f5f5f5;
+    -ms-overflow-style: none;
+    scrollbar-width: none; /* Firefox */
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 2px;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
 `;
 
 export const CurrencyMenu = styled.ul`
@@ -61,6 +72,10 @@ export const CurrencyMenu = styled.ul`
   top: 80px;
   right: 55px;
   padding: 10px 0;
+  z-index: 10;
+  background: white;
+  width: 114px;
+  filter: drop-shadow(0px 4px 35px rgba(168, 172, 176, 0.19));
 `;
 
 export const CurrencyMenuItem = styled.option`
@@ -75,7 +90,6 @@ export const CurrencyMenuItem = styled.option`
 export const CurrencyIcon = styled.p`
   font-weight: 500;
   font-size: 18px;
-  line-height: 160%;
 `;
 
 export const CartItemNumber = styled.div`
@@ -96,5 +110,58 @@ export const CartNumber = styled.p`
   color: white;
   font-size: 10px;
   font-weight: 600;
-  margin-bottom: 3px;
+`;
+
+export const OverlayLimiter = styled.div`
+  height: 220px;
+`;
+export const OverLayPositioner = styled.div`
+  max-width: 1140px;
+  height: 100%;
+  margin: auto;
+  position: relative;
+`;
+export const CountWrapper = styled.div`
+  display: flex;
+  padding: 16px 0;
+`;
+export const BoldTitle = styled.p`
+  font-weight: 700;
+  font-size: 16px;
+`;
+
+export const Count = styled.p`
+  font-weight: 500;
+  font-size: 16px;
+`;
+
+export const TotalWraper = styled.div`
+  display: flex;
+  padding: 16px 0;
+  justify-content: space-between;
+`;
+
+export const CheckoutButton = styled.div`
+  height: 43px;
+  width: 170px;
+  background: ${(props) => props.color};
+  font-weight: 600;
+  font-size: 14px;
+  display: grid;
+  background: #5ece7b;
+  place-items: center;
+  cursor: pointer;
+  color: white;
+`;
+export const ViewBag = styled.div`
+  height: 43px;
+  width: 170px;
+  background: ${(props) => props.color};
+  font-weight: 600;
+  font-size: 14px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  color: #1d1f22;
 `;

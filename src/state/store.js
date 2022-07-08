@@ -8,7 +8,7 @@ import {
 export const rootReducer = combineReducers({
   selectedCurrency,
   category: categoryReducer,
-  addToCart: cartReducer,
+  cartStore: cartReducer,
 });
 
 export const store = createStore(rootReducer);

@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const ProductGrid = styled.div`
   max-width: 1140px;
@@ -12,6 +12,9 @@ export const ProductCardWrapper = styled.div`
   position: relative;
   padding: 16px;
   max-width: 350px;
+  &:hover {
+    filter: drop-shadow(0px 4px 35px rgba(168, 172, 176, 0.19));
+  }
 `;
 
 export const ProductImage = styled.img`
@@ -64,4 +67,17 @@ export const OutOfStock = styled.p`
   margin-top: 25%;
   height: 50px;
   text-align: center;
+`;
+
+export const Toast = styled.div`
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.3);
+  color: #90ee90;
+  font-size: 25px;
+  font-weight: 700;
+  padding: 10px;
 `;

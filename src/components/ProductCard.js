@@ -7,19 +7,20 @@ import {
   AddToCardIcon,
   OutOfStock,
   OutOfStockModal,
+  Toast,
 } from "./styles/Products.styled";
 import { store } from "../state/store";
-
-import ProductAttributes from "./ProductCardAtributes";
 import { nanoid } from "@reduxjs/toolkit";
+import ProductAttributes from "./ProductCardAtributes";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
 class ProductCard extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      showToast: false,
       currency: store.getState().selectedCurrency,
-      cartArr: store.getState().addToCart,
       productData: {},
     };
     this.addToCart = this.addToCart.bind(this);
@@ -27,14 +28,16 @@ class ProductCard extends Component {
 
   createProduct() {
     const productData = {
-      id: nanoid(),
+      uniqueID: nanoid(),
+      id: this.props.product.id,
       brand: this.props.product.brand,
       name: this.props.product.name,
       prices: this.props.product.prices,
       gallery: this.props.product.gallery,
       description: this.props.product.description,
       attributes: {},
-      artibuteSets: this.props.product.attributes,
+      attributeSets: this.props.product.attributes,
+      count: 1,
     };
 
     this.props.product.attributes.forEach((attribute) => {
@@ -54,8 +57,8 @@ class ProductCard extends Component {
     });
   }
 
-  handleAttributeSelect = (e) => {
-    const { name, value } = e;
+  handleAttributeSelect = (data) => {
+    let { name, value } = data;
     this.setState((prevState, props) => ({
       productData: {
         ...prevState.productData,
@@ -67,12 +70,19 @@ class ProductCard extends Component {
     }));
   };
   addToCart = (e) => {
-    console.log(this.state.productData);
     this.props.addToCart(this.state.productData);
+    this.setState((prevState, props) => ({
+      productData: {
+        ...prevState.productData,
+        count: 1,
+      },
+    }));
+    this.setState({ showToast: true });
+
+    setTimeout(() => {
+      this.setState({ showToast: false });
+    }, 1500);
   };
-  componentDidUpdate() {
-    console.log("updated");
-  }
 
   render() {
     const { name, gallery, attributes, prices, inStock, brand } =
@@ -89,20 +99,32 @@ class ProductCard extends Component {
             </OutOfStockModal>
           )}
           <div style={{ position: "relative" }}>
-            <ProductImage src={gallery[0]} />
+            {this.state.showToast && <Toast>Added to cart</Toast>}
+            <Link
+              to={{
+                pathname: "/product",
+                search: this.props.product.id,
+              }}
+            >
+              <ProductImage src={gallery[0]} />
+            </Link>
+
             {inStock && (
               <AddToCardIcon onClick={this.addToCart}>
                 <img src="empty-cart.png" alt="cart" />
               </AddToCardIcon>
             )}
           </div>
-          <ProductName>{brand + " - " + name}</ProductName>
+          <Link to="product" state={{ prod: this.props.product.id }}>
+            <ProductName>{brand + " - " + name}</ProductName>
+          </Link>
+
           {attributes.map((attribute, i) => {
             return (
               <ProductAttributes
+                getValues={this.handleAttributeSelect}
                 key={i}
                 attribute={attribute}
-                onSelecetAttribute={this.handleAttributeSelect}
               />
             );
           })}

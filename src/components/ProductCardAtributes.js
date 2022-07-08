@@ -9,6 +9,8 @@ import { Component } from "react";
    AttributesWrap,
  } from "./styles/AttributeInput";
 
+
+ 
  class ProductAttributes extends Component {
    constructor(props) {
      super(props);
@@ -17,10 +19,10 @@ import { Component } from "react";
      };
    }
 
-   sendSelectedAtributesToParent = (e) => {
+   selectAttributes = (e) => {
      const name = e.currentTarget.getAttribute("name");
      const value = e.currentTarget.getAttribute("value");
-     this.props.onSelecetAttribute({ name, value });
+     this.props.getValues({ name, value });
    };
 
    render() {
@@ -28,7 +30,7 @@ import { Component } from "react";
 
      return (
        <>
-         {this.props.attribute.name}{" "}
+         {this.props.attribute.name}
          <AttributesWrap>
            {items.map((item, i) => {
              const uniqeInpuId = nanoid();
@@ -41,9 +43,9 @@ import { Component } from "react";
                      name={this.state.attributeGroup}
                    />
                    <ColorAttribute
-                     onClick={this.sendSelectedAtributesToParent}
                      value={item.value}
                      color={item.value}
+                     onClick={this.selectAttributes}
                      htmlFor={uniqeInpuId}
                      title={item.displayValue}
                      name={name}
@@ -55,12 +57,13 @@ import { Component } from "react";
                <TextWrapper>
                  <RadioInput
                    type="radio"
+                   checked={this.state.marked}
                    id={uniqeInpuId}
                    name={this.state.attributeGroup}
                  />
                  <TextArrtibute
-                   onClick={this.sendSelectedAtributesToParent}
                    name={name}
+                   onClick={this.selectAttributes}
                    value={item.value}
                    htmlFor={uniqeInpuId}
                  >
