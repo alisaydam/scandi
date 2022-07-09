@@ -37,8 +37,8 @@ class Header extends Component {
   componentDidMount() {
     this.unsubscribe = store.subscribe(() => {
       this.setState({
-        currency: store.getState().selectedCurrency,
         cart: store.getState().cartStore,
+        currency: store.getState().selectedCurrency,
       });
     });
   }
@@ -62,6 +62,8 @@ class Header extends Component {
     }
   };
   render() {
+    console.log(this.state.cart);
+
     return (
       <Nav>
         {this.state.showModal && (
@@ -80,8 +82,11 @@ class Header extends Component {
                 <TotalWraper>
                   <BoldTitle>Total</BoldTitle>
                   <BoldTitle>
-                    {((this.state.cart.totalCost / 100) * 21).toFixed(2) || 0}{" "}
-                    {this.state.currency}
+                  {(
+                    (this.state.cart.totalCost / 100) * 21 +
+                    +this.state.cart.totalCost
+                  ).toFixed(2) || 0}{" "}
+                  {this.state.currency}
                   </BoldTitle>
                 </TotalWraper>
                 <TotalWraper>
