@@ -12,7 +12,6 @@ const initialState = {
 };
 
 export const cartReducer = (state = initialState, action) => {
-  console.log(state.cart)
   if (action.type === "add-to-cart") {
     let produktArray = [];
     let cartTotalPrice = 0;
@@ -25,15 +24,12 @@ export const cartReducer = (state = initialState, action) => {
     });
     if (sameProduct) {
       if (sameProduct) {
-        console.log("same prod")
         const index = state.cart.indexOf(sameProduct);
         sameProduct = {
           ...sameProduct,
           count: sameProduct.count + 1,
         };
-        console.log(state.cart)
         state.cart.splice(index, 1, sameProduct);
-        console.log(state.cart)
 
         produktArray = state.cart;
         localStorage.setItem("cart", JSON.stringify(produktArray));
@@ -42,7 +38,7 @@ export const cartReducer = (state = initialState, action) => {
           totalCost: cartTotalPrice,
         };
         localStorage.setItem("cart", JSON.stringify(produktArray));
-        return state
+        return state;
       }
     } else {
       produktArray = [...state.cart, action.productData];
@@ -79,22 +75,18 @@ export const cartReducer = (state = initialState, action) => {
       state.cart.splice(index, 1, newProduct);
       localStorage.setItem("cart", JSON.stringify(state.cart));
     }
-
   }
   if (action.type === "update-cost") {
     state.totalCost = findTotal(state.cart);
   }
-  // console.log(state.cart);
   const total = findTotal(state.cart);
   localStorage.setItem("total", JSON.stringify(total));
   state.totalCost = total;
   return state;
 };
 
-export const selectedCurrency = (
-  state = localStorage.getItem("preferredCurrency") || "$",
-  action
-) => {
+const currency = localStorage.getItem("preferredCurrency") || "$";
+export const selectedCurrency = (state = currency, action) => {
   if (action.type === "change-currency") {
     localStorage.setItem("preferredCurrency", action.currency);
     state = action.currency;
@@ -104,11 +96,14 @@ export const selectedCurrency = (
 
 // Calculate Total Price
 const findTotal = (arr) => {
+  console.log(arr);
   const total = arr
     .map((x) => {
       return (
         x.prices.find(
-          (y) => y.currency.symbol === localStorage.getItem("preferredCurrency")
+          (y) =>
+            y.currency.symbol === localStorage.getItem("preferredCurrency") ||
+            currency
         ).amount * x.count
       );
     })
@@ -116,6 +111,5 @@ const findTotal = (arr) => {
       return a + b;
     }, 0)
     .toFixed(2);
-  console.log(total);
   return total;
 };

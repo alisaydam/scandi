@@ -35,6 +35,9 @@ class Header extends Component {
     };
   }
   componentDidMount() {
+    if(!localStorage.getItem("preferredCurrency")){
+      localStorage.setItem("preferredCurrency", "$")
+    }
     this.unsubscribe = store.subscribe(() => {
       this.setState({
         cart: store.getState().cartStore,
@@ -62,8 +65,6 @@ class Header extends Component {
     }
   };
   render() {
-    console.log(this.state.cart);
-
     return (
       <Nav>
         {this.state.showModal && (
@@ -82,11 +83,11 @@ class Header extends Component {
                 <TotalWraper>
                   <BoldTitle>Total</BoldTitle>
                   <BoldTitle>
-                  {(
-                    (this.state.cart.totalCost / 100) * 21 +
-                    +this.state.cart.totalCost
-                  ).toFixed(2) || 0}{" "}
-                  {this.state.currency}
+                    {(
+                      (this.state.cart.totalCost / 100) * 21 +
+                      +this.state.cart.totalCost
+                    ).toFixed(2) || 0}{" "}
+                    {this.state.currency}
                   </BoldTitle>
                 </TotalWraper>
                 <TotalWraper>
